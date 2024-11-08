@@ -8,27 +8,26 @@ package edu.odu.cs.cs330.items;
  * to false.
  */
 @SuppressWarnings({
-    "PMD.CloneMethodReturnTypeMustMatchClassName",
-    "PMD.CloneThrowsCloneNotSupportedException",
-    "PMD.LawOfDemeter",
-    "PMD.OnlyOneReturn",
-    "PMD.ProperCloneImplementation",
-    "PMD.MethodArgumentCouldBeFinal",
-    "PMD.LocalVariableCouldBeFinal",
-    "PMD.ShortClassName",
+        "PMD.CloneMethodReturnTypeMustMatchClassName",
+        "PMD.CloneThrowsCloneNotSupportedException",
+        "PMD.LawOfDemeter",
+        "PMD.OnlyOneReturn",
+        "PMD.ProperCloneImplementation",
+        "PMD.MethodArgumentCouldBeFinal",
+        "PMD.LocalVariableCouldBeFinal",
+        "PMD.ShortClassName",
 })
 public class Tool extends Equippable {
     /**
      * Format used to generate a printable representation.
      */
     public static final String FMT_STR = String.join(
-        "",
-        "  Nme: %s%n",
-        "  Dur: %d%n",
-        "  Spd: %d%n",
-        "  Mtl: %s%n",
-        "  Mdr: %s (Lvl %d)%n"
-    );
+            "",
+            "  Nme: %s%n",
+            "  Dur: %d%n",
+            "  Spd: %d%n",
+            "  Mtl: %s%n",
+            "  Mdr: %s (Lvl %d)%n");
 
     /**
      * Base operation (e.g., harvest/mine) speed.
@@ -38,8 +37,7 @@ public class Tool extends Equippable {
     /**
      * Default to an unstackable tool with zero speed.
      */
-    public Tool()
-    {
+    public Tool() {
         super();
 
         this.speed = 0;
@@ -50,8 +48,7 @@ public class Tool extends Equippable {
      *
      * @return how quickly a tool operates
      */
-    public int getSpeed()
-    {
+    public int getSpeed() {
         return this.speed;
     }
 
@@ -60,31 +57,41 @@ public class Tool extends Equippable {
      *
      * @param spd new speed
      */
-    public void setSpeed(int spd)
-    {
+    public void setSpeed(int spd) {
         this.speed = spd;
     }
 
     @Override
-    public int requiredNumberOfValues()
-    {
+    public int requiredNumberOfValues() {
         // Replace this with the correct value
-        return -1;
+        return 6; // length of FMT_STR
     }
 
     @Override
-    public void fromTokens(String[] tokens)
-    {
-
+    public void fromTokens(String[] tokens) {
+        this.setName(tokens[0]);
+        this.setMaterial(tokens[1]);
+        this.setDurability(Integer.parseInt(tokens[2]));
+        this.setSpeed(Integer.parseInt(tokens[3]));
+        this.setModifier(tokens[4]);
+        this.setModifierLevel(Integer.parseInt(tokens[5]));
     }
 
     /**
      * Clone--i.e., copy--this Tool.
      */
     @Override
-    public Item clone()
-    {
-        return null;
+    public Item clone() {
+        Tool cpy = new Tool();
+
+        cpy.setName(this.getName());
+        cpy.setMaterial(this.getMaterial());
+        cpy.setDurability(this.getDurability());
+        cpy.speed = this.speed;
+        cpy.setModifier(this.getModifier());
+        cpy.setModifierLevel(this.getModifierLevel());
+
+        return cpy;
     }
 
     /**
@@ -94,15 +101,18 @@ public class Tool extends Equippable {
      * @param rhs object for which a comparison is desired
      */
     @Override
-    public boolean equals(Object rhs)
-    {
+    public boolean equals(Object rhs) {
         if (!(rhs instanceof Tool)) {
             return false;
         }
 
         Tool rhsItem = (Tool) rhs;
 
-        return false;
+        return this.getName().equals(rhsItem.getName()) &&
+                this.getSpeed() == rhsItem.getSpeed() &&
+                this.getMaterial().equals(rhsItem.getMaterial()) &&
+                this.getModifier().equals(rhsItem.getModifier()) &&
+                this.getModifierLevel() == rhsItem.getModifierLevel();
     }
 
     /**
@@ -110,8 +120,7 @@ public class Tool extends Equippable {
      * and modifierLevel.
      */
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         int hash = this.getName().hashCode();
         hash += 2 * this.getMaterial().hashCode();
         hash += 4 * this.getModifier().hashCode();
@@ -125,16 +134,14 @@ public class Tool extends Equippable {
      * *Print* a Tool.
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format(
-           FMT_STR,
-           this.getName(),
-           this.getDurability(),
-           this.getSpeed(),
-           this.getMaterial(),
-           this.getModifier(),
-           this.getModifierLevel()
-        );
+                FMT_STR,
+                this.getName(),
+                this.getDurability(),
+                this.getSpeed(),
+                this.getMaterial(),
+                this.getModifier(),
+                this.getModifierLevel());
     }
 }

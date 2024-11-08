@@ -7,25 +7,24 @@ package edu.odu.cs.cs330.items;
  * Consumable Items must be stackable.
  */
 @SuppressWarnings({
-    "PMD.CloneMethodReturnTypeMustMatchClassName",
-    "PMD.CloneThrowsCloneNotSupportedException",
-    "PMD.LawOfDemeter",
-    "PMD.OnlyOneReturn",
-    "PMD.ProperCloneImplementation",
-    "PMD.MethodArgumentCouldBeFinal",
-    "PMD.LocalVariableCouldBeFinal",
-    "PMD.BeanMembersShouldSerialize"
+        "PMD.CloneMethodReturnTypeMustMatchClassName",
+        "PMD.CloneThrowsCloneNotSupportedException",
+        "PMD.LawOfDemeter",
+        "PMD.OnlyOneReturn",
+        "PMD.ProperCloneImplementation",
+        "PMD.MethodArgumentCouldBeFinal",
+        "PMD.LocalVariableCouldBeFinal",
+        "PMD.BeanMembersShouldSerialize"
 })
 public class Consumable extends Item {
     /**
      * Format used to generate a printable representation.
      */
     public static final String FMT_STR = String.join(
-        "",
-        "  Nme: %s%n",
-        "  Eft: %s%n",
-        "  Use: %d%n"
-    );
+            "",
+            "  Nme: %s%n",
+            "  Eft: %s%n",
+            "  Use: %d%n");
 
     /**
      * The effect "buff" or "debuff" that is received when using this item.
@@ -41,11 +40,10 @@ public class Consumable extends Item {
      * Default to a Consumable Item with an empty name, no effect and zero
      * uses.
      */
-    public Consumable()
-    {
+    public Consumable() {
         super("[Placeholder]");
-
-        // Complete the remainder of this method
+        this.effect = "";
+        this.uses = 0;
     }
 
     /**
@@ -53,8 +51,7 @@ public class Consumable extends Item {
      *
      * @return the set effect (i.e., buff or debuff)
      */
-    public String getEffect()
-    {
+    public String getEffect() {
         return this.effect;
     }
 
@@ -63,8 +60,7 @@ public class Consumable extends Item {
      *
      * @param newEff replacement effect
      */
-    public void setEffect(String newEff)
-    {
+    public void setEffect(String newEff) {
         this.effect = newEff;
     }
 
@@ -73,8 +69,7 @@ public class Consumable extends Item {
      *
      * @return number of total uses
      */
-    public int getNumberOfUses()
-    {
+    public int getNumberOfUses() {
         return this.uses;
     }
 
@@ -83,38 +78,39 @@ public class Consumable extends Item {
      *
      * @param allowed number of allowed uses
      */
-    public void setNumberOfUses(int allowed)
-    {
+    public void setNumberOfUses(int allowed) {
         this.uses = allowed;
     }
 
     @Override
-    public boolean isStackable()
-    {
+    public boolean isStackable() {
         return true;
     }
 
     @Override
-    public int requiredNumberOfValues()
-    {
-        // Replace this with the correct value
-        return -1;
+    public int requiredNumberOfValues() {
+        return 3; // length of FMT_STR
     }
 
     @Override
-    public void fromTokens(String[] tokens)
-    {
-
+    public void fromTokens(String[] tokens) {
+        this.setName(tokens[0]);
+        this.effect = tokens[1];
+        this.uses = Integer.parseInt(tokens[2]);
     }
 
     /**
      * Clone--i.e., copy--this Consumable Item.
      */
     @Override
-    public Item clone()
-    {
-        // Replace the next line
-        return null;
+    public Item clone() {
+        Consumable cpy = new Consumable();
+
+        cpy.name = this.name;
+        cpy.effect = this.effect;
+        cpy.uses = this.uses;
+
+        return cpy;
     }
 
     /**
@@ -123,14 +119,14 @@ public class Consumable extends Item {
      * @param rhs object for which a comparison is desired
      */
     @Override
-    public boolean equals(Object rhs)
-    {
+    public boolean equals(Object rhs) {
         if (!(rhs instanceof Consumable)) {
             return false;
         }
 
-        // Replace the "return false" with your logic
-        return false;
+        Consumable rhsItem = (Consumable) rhs;
+
+        return this.getName().equals(rhsItem.getName()) && this.getEffect().equals(rhsItem.getEffect());
     }
 
     /**
@@ -140,17 +136,15 @@ public class Consumable extends Item {
      * return the result.
      */
     @Override
-    public int hashCode()
-    {
-        return -1;
+    public int hashCode() {
+        return this.getName().hashCode() + this.effect.hashCode();
     }
 
     /**
      * *Print* the Consumable Item.
      */
     @Override
-    public String toString()
-    {
-        return "Make sure to check Armour.toString for hints.";
+    public String toString() {
+        return String.format(FMT_STR, this.getName(), this.effect, this.uses);
     }
 }
